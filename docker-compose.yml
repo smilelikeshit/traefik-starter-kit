@@ -16,7 +16,7 @@ services:
       - ./cert:/data
       - ./log:/log
       - ./traefik.toml:/etc/traefik/traefik.toml               # Traefik static config
-      - ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
+      - ./traefik.config.toml:/etc/traefik/traefik.configuration.toml # Traefik dynamic config
     networks:
       - traefik-gateway
 
