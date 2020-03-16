@@ -1,0 +1,45 @@
+[http]
+  [http.routers]
+  #########################################################################
+    # http #
+    [http.routers.http-to-app]
+      # You can change the rules here and make it more complex. Check traefik
+      # docs!
+      rule = "Host(`app.example.com`)"
+      service = "app"
+      entrypoints = ["http"]
+      # enable if u want redirect to https 
+      #middlewares = ["redirect"]
+
+  ## https #
+    [http.routers.https-to-app]
+      rule = "Host(`app.example.com`)"
+      service = "app"
+      entrypoints = ["https"]
+      middlewares = ["app-compress"]
+      [http.routers.https-to-app.tls]
+
+    [http.services]
+    # service 
+      [http.services.app]
+        [http.services.app.loadBalancer]
+        passHostHeader = true
+          [[http.services.app.loadBalancer.servers]]
+            # This is where your dev app lives.
+            url = "http://url/"
+
+
+  ########################################################################
+
+  [http.middlewares]
+    [http.middlewares.redirect.redirectScheme]
+      scheme = "https"
+      average = 100
+      burst = 50
+    [http.middlewares.app-compress.compress]
+
+
+[tls]
+  [[tls.certificates]]
+    certFile = "/data/ca-bundle.pem"
+    keyFile = "/data/commercial.key"
