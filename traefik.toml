@@ -20,7 +20,7 @@
   # Note that the path is the path to the file inside Docker, not insider your machine!
   # If you want do use Docker itself for this check traefik docs!
   [providers.file]
-    filename = "/etc/traefik/traefik.configuration.toml"
+    filename = "/etc/traefik/traefik.config.toml"
     watch = true
 
 [api]

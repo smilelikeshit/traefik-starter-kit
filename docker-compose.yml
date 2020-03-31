@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   reverse-proxy:
-    image: traefik:v2.0
+    image: traefik:v2.1
     # Enables the web UI and tells Traefik to listen to docker
     restart: unless-stopped
     ports:
@@ -16,7 +16,7 @@ services:
       - ./cert:/data
       - ./log:/log
       - ./traefik.toml:/etc/traefik/traefik.toml               # Traefik static config
-      - ./traefik.config.toml:/etc/traefik/traefik.configuration.toml # Traefik dynamic config
+      - ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
     networks:
       - traefik-gateway
 
