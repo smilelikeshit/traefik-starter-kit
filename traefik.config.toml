@@ -41,5 +41,5 @@
 
 [tls]
   [[tls.certificates]]
-    certFile = "/data/ca-bundle.pem"
-    keyFile = "/data/commercial.key"
+    certFile = "/data/fullchain.pem"
+    keyFile = "/data/privkey.pem"

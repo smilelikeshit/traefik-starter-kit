@@ -19,6 +19,13 @@ services:
       - ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
     networks:
       - traefik-gateway
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
+
+
 
 networks:
   traefik-gateway:
