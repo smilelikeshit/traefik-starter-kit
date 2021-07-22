@@ -1,9 +1,10 @@
 version: '3.7'
 services:
-  reverse-proxy:
-    image: traefik:v2.1
+  traefik:
+    image: traefik:v2.4
     # Enables the web UI and tells Traefik to listen to docker
     restart: unless-stopped
+    container_name: traefik-app
     ports:
       # The HTTP port
       - "80:80"
@@ -16,7 +17,8 @@ services:
       - ./cert:/data
       - ./log:/log
       - ./traefik.toml:/etc/traefik/traefik.toml               # Traefik static config
-      - ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
+      # enable if u want using providers file 
+      #- ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
     networks:
       - traefik-gateway
     deploy:
@@ -25,9 +27,22 @@ services:
           cpus: '0.25'
           memory: '256M'
 
+  redis:
+    image: redis:6.2.4-alpine
+    restart: unless-stopped
+    container_name: traefik-redis
+    networks:
+      - traefik-gateway
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: '128M'
 
 
 networks:
+  #make sure u've created the network below
+  #docker network create traefik-gateway -d bridge
   traefik-gateway:
     external:
        name: gateway
