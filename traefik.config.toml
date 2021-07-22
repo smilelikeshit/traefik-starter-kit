@@ -1,3 +1,5 @@
+
+
 [http]
   [http.routers]
   #########################################################################
@@ -7,16 +9,16 @@
       # docs!
       rule = "Host(`app.example.com`)"
       service = "app"
-      entrypoints = ["http"]
+      entryPoints = ["http"]
       # enable if u want redirect to https 
-      #middlewares = ["redirect"]
+      middlewares = ["redirect"]
 
   ## https #
     [http.routers.https-to-app]
       rule = "Host(`app.example.com`)"
       service = "app"
-      entrypoints = ["https"]
-      middlewares = ["app-compress"]
+      entryPoints = ["https"]
+      middlewares = ["app-compress","app-ratelimit","app-latency"]
       [http.routers.https-to-app.tls]
 
     [http.services]
@@ -29,17 +31,20 @@
             url = "http://url/"
 
 
-  ########################################################################
+########################################################################
 
-  [http.middlewares]
-    [http.middlewares.redirect.redirectScheme]
-      scheme = "https"
-      average = 100
-      burst = 50
-    [http.middlewares.app-compress.compress]
+[http.middlewares]
+  [http.middlewares.redirect.redirectScheme]
+    scheme = "https"
+  [http.middlewares.app-compress.compress]
+  [http.middlewares.app-ratelimit.rateLimit]
+    average = 100
+    burst = 50
+  [http.middlewares.app-latency.circuitBreaker]
+    expression = "LatencyAtQuantileMS(50.0) > 100"
 
 
 [tls]
-  [[tls.certificates]]
+  [tls.certificates]
     certFile = "/data/fullchain.pem"
     keyFile = "/data/privkey.pem"

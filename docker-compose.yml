@@ -18,7 +18,7 @@ services:
       - ./log:/log
       - ./traefik.toml:/etc/traefik/traefik.toml               # Traefik static config
       # enable if u want using providers file 
-      #- ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
+      - ./traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config
     networks:
       - traefik-gateway
     deploy:
@@ -26,19 +26,6 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
-
-  redis:
-    image: redis:6.2.4-alpine
-    restart: unless-stopped
-    container_name: traefik-redis
-    networks:
-      - traefik-gateway
-    deploy:
-      resources:
-        limits:
-          cpus: '0.15'
-          memory: '128M'
-
 
 networks:
   #make sure u've created the network below
